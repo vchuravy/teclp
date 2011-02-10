@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.util.config.Configuration;
 
 import tectonicus.JsArrayWriter;
@@ -70,6 +71,16 @@ public class teclpPlayerListener extends PlayerListener {
     	if(players.get(event.getPlayer().getName()).moved()){
     		update();
     	}
+    }
+    
+    public void onPlayerTeleport(PlayerMoveEvent event) {
+    	super.onPlayerTeleport(event);
+    	update();
+    }
+    
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+    	super.onPlayerRespawn(event);
+    	update();
     }
     
     /*

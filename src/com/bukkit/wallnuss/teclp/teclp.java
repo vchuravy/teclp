@@ -66,6 +66,8 @@ public class teclp extends JavaPlugin {
         pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Monitor, this );
         pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
         pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
        
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         PluginDescriptionFile pdfFile = this.getDescription();
