@@ -45,16 +45,24 @@ import com.bukkit.wallnuss.teclp.teclp;
 public class teclpPlayerListener extends PlayerListener {
     private final teclp plugin;
     private double distance;
+    private boolean cavemap;
     Configuration config;
     private HashMap<String, TECLPPlayer> players = new HashMap <String, TECLPPlayer>(); //PlayerList
     
-    public teclpPlayerListener(teclp teclp) {
-        plugin = teclp;
+    public teclpPlayerListener(teclp t) {
+        plugin = t;
         config = new Configuration(new File(teclp.CONFIGURATION_FILE) );
         config.load();
+        if(config.getString(teclp.CAVEMAP).equalsIgnoreCase("yes")){
+        	cavemap = true;
+        }else{
+        	cavemap=false;
+        }
         distance =  config.getDouble(teclp.DISTANCE_FOR_UPDATE, 10);
         System.out.println("TECLP: output: "+config.getString(teclp.PATH_TO_TEC_OUTPUT)+" update each "+ config.getDouble(teclp.DISTANCE_FOR_UPDATE, 30)+" blocks");
-        
+        if(cavemap){
+        	System.out.println("TECLP: Cavemap = yes cavemap-output: "+config.getString(teclp.CAVEMAP_PATH));
+        }
     }
     
     @Override
@@ -88,14 +96,22 @@ public class teclpPlayerListener extends PlayerListener {
      */
     private void update(){
     	JsArrayWriter jsWriter = null;
+    	JsArrayWriter jsWriter_cave =null;
+		
     	try
 		{
 			jsWriter = new JsArrayWriter(new File(config.getString(teclp.PATH_TO_TEC_OUTPUT)+"players.js"), "playerData");
+			if(cavemap){
+				jsWriter_cave = new JsArrayWriter(new File(config.getString(teclp.CAVEMAP_PATH)+"player.js"), "playerData");
+			}
 			
 			for(Map.Entry<String, TECLPPlayer> e : players.entrySet()){
 				HashMap<String, String> args = new HashMap<String, String>();
 				args = e.getValue().getData();
 				jsWriter.write(args);
+				if(cavemap){
+					jsWriter_cave.write(args);
+				}
 			}
 		}
 		catch (Exception e)
@@ -104,8 +120,12 @@ public class teclpPlayerListener extends PlayerListener {
 		}
 		finally
 		{
-			if (jsWriter != null)
+			if (jsWriter != null){
 				jsWriter.close();
+			}
+			if(jsWriter_cave != null){
+				jsWriter_cave.close();
+			}
 		}
     	
 		

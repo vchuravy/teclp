@@ -46,6 +46,8 @@ public class teclp extends JavaPlugin {
     public static final String PATH_TO_TEC_OUTPUT = "tec-output";
     public static final String DISTANCE_FOR_UPDATE ="distance-for-update";
     public static final String CONFIGURATION_FILE ="plugins/teclp/config.yml";
+	public static final String CAVEMAP = "cave-map";
+	public static final String CAVEMAP_PATH = "cave-map-path";
 	private final teclpPlayerListener playerListener = new teclpPlayerListener(this);
     private final teclpBlockListener blockListener = new teclpBlockListener(this);
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
