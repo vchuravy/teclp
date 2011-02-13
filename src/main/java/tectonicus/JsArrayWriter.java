@@ -13,7 +13,7 @@
  */
 
 /*
- * @author OrangyTang
+ * @author OrangyTang, Valentin Churavy {v [dot] churavy [at] gmail [dot] com}
  * @see Apache License v2.0 (ASF2.0)
  */
 package tectonicus;
@@ -36,10 +36,19 @@ public class JsArrayWriter
 {
 	private OutputStream out;
 	private PrintWriter writer;
+	private File file;
+	private String arrayName;
 	
 	private boolean hasWritenEntry;
 	
-	public JsArrayWriter(File file, String arrayName) throws FileNotFoundException, IOException
+	public JsArrayWriter(File f, String name) throws FileNotFoundException, IOException
+	{
+		file=f;
+		arrayName=name;
+		open();
+	}
+	
+	public void open()throws FileNotFoundException, IOException
 	{
 		if (file.exists())
 			file.delete();

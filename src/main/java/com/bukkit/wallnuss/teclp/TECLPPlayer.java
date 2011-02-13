@@ -3,7 +3,7 @@
  * File name: TECLPPlayer.java
  * Description:  Stores the players data during runtime.
  *   
- * @author Valentin CHuravy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
+ * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
  * @version v1.0
  *   
  * @see The GNU Public License (GPLv3)
@@ -39,14 +39,14 @@ public class TECLPPlayer {
 	private int air;
 	private int health;
 	private Player p_ref;
-	private Configuration config;
 	private double distance;
+	private long world;
 	
-	public TECLPPlayer(Player p, double d) {
+	public TECLPPlayer(Player p, double d, long w) {
 		super();
 		p_ref=p;
 		distance=d;
-		
+		world = w;		
 	}
 	
 	private void update (){
@@ -56,6 +56,7 @@ public class TECLPPlayer {
 		this.worldZ = p_ref.getLocation().getZ();
 		this.air = p_ref.getRemainingAir();
 		this.health = p_ref.getHealth();
+		this.world = p_ref.getWorld().getId();
 	}
 
 	public boolean moved (){
@@ -86,6 +87,10 @@ public class TECLPPlayer {
 		args.put("health", ""+ health);
 		args.put("air", ""+ air);
 		return args;
+	}
+	
+	public long getWorld(){
+		return world;
 	}
 	
 }

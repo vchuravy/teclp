@@ -3,7 +3,7 @@
  * File name: teclp.java
  * Description:  Main File of the teclp bukkit plugin.
  *   
- * @author Valentin CHuravy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
+ * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
  * @version v1.0
  *   
  * @see The GNU Public License (GPLv3)
@@ -27,6 +27,7 @@
 package com.bukkit.wallnuss.teclp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.Server;
@@ -54,6 +55,12 @@ public class teclp extends JavaPlugin {
 
     public teclp(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
         super(pluginLoader, instance, desc, folder, plugin, cLoader);
+        try {
+			Config config = new Config(CONFIGURATION_FILE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         // TODO: Place any custom initialisation code here
         // NOTE: Event registration should be done in onEnable not here as all events are unregistered when a plugin is disabled
     }
