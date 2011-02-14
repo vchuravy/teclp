@@ -23,7 +23,7 @@
  * You should have received a copy of the GNU General Public License
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bukkit.wallnuss.teclp;
+package com.gmail.wallnuss.bukkit.teclp;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

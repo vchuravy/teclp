@@ -24,7 +24,7 @@
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bukkit.wallnuss.teclp ;
+package com.gmail.wallnuss.bukkit.teclp ;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,15 +38,18 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.world.WorldEvent;
+import org.bukkit.event.world.WorldListener;
 import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
+
+import com.gmail.wallnuss.bukkit.teclp.teclp;
+
 
 import tectonicus.JsArrayWriter;
 
-import com.bukkit.wallnuss.teclp.teclp;
 
 
-public class teclpPlayerListener extends PlayerListener {
+public class teclpPlayerListener extends PlayerListener{
     private final teclp plugin;
     private double distance;
     Configuration config;
@@ -55,54 +58,49 @@ public class teclpPlayerListener extends PlayerListener {
     private boolean debug = true;//TODO
     
     public teclpPlayerListener(teclp t) {
-        plugin = t;/*
+        plugin = t;
         config = new Configuration(new File(teclp.CONFIGURATION_FILE) );
         config.load();
+        List<String> world_nodes = config.getKeys("worlds");
         
-        config.setProperty("worlds.world2", "[C:\\dev\\bukkit\\plugins\\]");
-        Map<String,ConfigurationNode> world_nodes = config.getNodes("worlds");
         if(world_nodes==null){
-        	System.out.println("YAML error");
+            System.out.println("YAML error");
         }else{
-        	System.out.println("Size of map:" +world_nodes.size());
-        	System.out.println("Object of map:" +world_nodes.toString());
-        	System.out.println("Values of map:" +world_nodes.values());
-        	System.out.println(world_nodes.get("world"));
-        }
-        int i = 3;
-        *//*
-        for (Map.Entry<String, ConfigurationNode> entry : world_nodes.entrySet()){
-        	System.out.println(i);
-        	i++;
-        	List<String> file_list = entry.getValue().getStringList(entry.getKey(), null);
-        	System.out.println("List init success");
-        	World world = plugin.getServer().getWorld(entry.getKey());
-        	if(debug){
-            	System.out.println("world name:"+entry.getKey()+"");
-            }
-        	if (world != null){
-        		JsArrayWriter[] jsWriter_array = new JsArrayWriter[file_list.size()];
-        		for(String file_name : file_list){
-        			if(debug){
-        	        	System.out.println("\t output:"+file_name);
-        	        }
-        			try {
-						jsWriter_array[file_list.indexOf(file_name)] = new JsArrayWriter(new File(file_name+"players.js"), "playerData");
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-        		}
+        	for (String world_name : world_nodes){
+        		World world = plugin.getServer().getWorld(world_name);
         		
-        		worlds.put(world.getId(), jsWriter_array);
-        	}else{
-        		System.out.println("World: "+entry.getKey()+"does not exist");
-        	}
-        }*/
-        //distance =  config.getDouble(teclp.DISTANCE_FOR_UPDATE, 10);
+            	if(debug){
+                	System.out.println("world name:"+world_name+"");
+                }
+            	if (world != null){
+            		List<String> paths =config.getStringList("worlds"+"."+world_name, null);
+            		JsArrayWriter[] jsWriter_array = new JsArrayWriter[paths.size()];
+            		if(!paths.isEmpty()){
+            			for (String path : paths){
+            				if(debug){
+                	        	System.out.println("\t output:"+path);
+                	        }
+                			try {
+        						jsWriter_array[paths.indexOf(path)] = new JsArrayWriter(new File(path+"players.js"), "playerData");
+        					} catch (FileNotFoundException e) {
+        						// TODO Auto-generated catch block
+        						e.printStackTrace();
+        					} catch (IOException e) {
+        						// TODO Auto-generated catch block
+        						e.printStackTrace();
+        					}
+                		}
+   
+                		worlds.put(world.getId(), jsWriter_array);
+                	}
+            		}else{
+                		System.out.println("World: "+world_name+"does not exist");
+                	}
+            	}
+            }
+            System.out.println("Size of map:" +world_nodes.size());
+            System.out.println("Object of map:" +world_nodes.toString());
+        distance =  config.getDouble(teclp.DISTANCE_FOR_UPDATE, 10);
         if(debug){
         	System.out.println("init done");
         }
@@ -117,6 +115,31 @@ public class teclpPlayerListener extends PlayerListener {
     	update();
     }
     
+    public void onWorldLoaded(WorldEvent event){
+    	World world = event.getWorld();
+    	System.out.println("World "+world.getName()+"loaded");
+    	List<String> paths =config.getStringList("worlds"+"."+world.getName(), null);
+		JsArrayWriter[] jsWriter_array = new JsArrayWriter[paths.size()];
+		if(!paths.isEmpty()){
+			for (String path : paths){
+				if(debug){
+    	        	System.out.println("\t output:"+path);
+    	        }
+    			try {
+					jsWriter_array[paths.indexOf(path)] = new JsArrayWriter(new File(path+"players.js"), "playerData");
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+
+    		worlds.put(world.getId(), jsWriter_array);
+    		System.out.println("output for world "+world.getName()+"activated files:"+paths.toString());
+		}
+    }
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
     	super.onPlayerMove(event);
