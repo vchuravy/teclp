@@ -38,7 +38,7 @@ public class TECLPPlayer {
 	private double worldZ;
 	private int air;
 	private int health;
-	private Player p_ref;
+	private Player p_ref; //Player reference.
 	private double distance;
 	private long world;
 	
@@ -49,7 +49,7 @@ public class TECLPPlayer {
 		world = w;		
 	}
 	
-	private void update (){
+	public void update (){
 		this.name = p_ref.getName();
 		this.worldX = p_ref.getLocation().getX();
 		this.worldY = p_ref.getLocation().getY();
@@ -78,7 +78,6 @@ public class TECLPPlayer {
 	}
 
 	public HashMap<String, String> getData() {
-		update();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("name", "\"" + name + "\"");
 		args.put("worldX", ""+ worldX );
@@ -86,6 +85,7 @@ public class TECLPPlayer {
 		args.put("worldZ", ""+ worldZ);
 		args.put("health", ""+ health);
 		args.put("air", ""+ air);
+		args.put("world_name", this.p_ref.getWorld().getName());
 		return args;
 	}
 	
