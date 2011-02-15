@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.bukkit.wallnuss</groupId>
   <artifactId>teclp</artifactId>
-  <version>1.11</version>
+  <version>1.12</version>
   <name>teclp</name>
   <description>Teclp is a bukkit plugin that enables live position updates for the map render tectonicus</description>
   <packaging>jar</packaging>
@@ -23,18 +23,6 @@
       </plugins>
   </build>
   <dependencies>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>1.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>1.7</version>
-      <classifier>javadoc</classifier>
-      <optional>true</optional>
-    </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
