@@ -1,0 +1,16 @@
+##
+#Configuration File of teclp v1.11
+#Line starting with # are comments
+##
+distance_for_updates: 10.0
+ # After this distance traveld by one player teclp is updating the positions. The higher the value the rarer is the update.
+
+#For each world add the folder name of the world (e.g nether) and one to many output paths.
+#Paths should look like this 'C:\path\to\tec\output\' on Windows or on linux '/var/www/map/'
+worlds:
+
+    nether:
+       - 'C:\dev\bukkit\test_env\nether\'
+    world: 
+       - 'C:\dev\bukkit\test_env\world\' #For each output add one line.
+    #   - 'C:\dev\'
