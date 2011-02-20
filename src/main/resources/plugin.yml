@@ -1,4 +1,5 @@
 name: teclp
-main: com.bukkit.wallnuss.teclp.teclp
+
+main: com.gmail.wallnuss.bukkit.teclp.teclp
 
 version: 1.12

@@ -4,7 +4,7 @@
  * Description:  Stores the players data during runtime.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.0
+ * @version v1.2
  *   
  * @see The GNU Public License (GPLv3)
  */
@@ -38,35 +38,42 @@ public class TECLPPlayer {
 	private double worldZ;
 	private int air;
 	private int health;
-	private Player p_ref; //Player reference.
+	private teclp plugin;
 	private double distance;
 	private long world;
 	
-	public TECLPPlayer(Player p, double d, long w) {
+	public TECLPPlayer(teclp teclp, String playerName) {
 		super();
-		p_ref=p;
-		distance=d;
-		world = w;		
+		plugin=teclp;
+		distance=plugin.getDistance();
+		name = playerName;
 	}
 	
-	public void update (){
-		this.name = p_ref.getName();
-		this.worldX = p_ref.getLocation().getX();
-		this.worldY = p_ref.getLocation().getY();
-		this.worldZ = p_ref.getLocation().getZ();
-		this.air = p_ref.getRemainingAir();
-		this.health = p_ref.getHealth();
-		this.world = p_ref.getWorld().getId();
+	public void update(){
+		Player player =plugin.getServer().getPlayer(name);
+		if (player != null){
+			this.worldX = player.getLocation().getX();
+			this.worldY = player.getLocation().getY();
+			this.worldZ = player.getLocation().getZ();
+			this.air = player.getRemainingAir();
+			this.health = player.getHealth();
+			this.world = player.getWorld().getId();
+		}
 	}
 
 	public boolean moved (){
-		if(diff_significant(worldX, p_ref.getLocation().getX()) || diff_significant(worldY, p_ref.getLocation().getY())){
-			return true;
+		Player player =plugin.getServer().getPlayer(name);
+		if (player != null){
+			if(diff_significant(worldX, player.getLocation().getX()) || diff_significant(worldY, player.getLocation().getY())){
+				return true;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}
 	}
-	
+
 	private boolean diff_significant(double x, double y){
 		double z = Math.abs(x-y);
 		if (z >= distance){ 
@@ -74,7 +81,7 @@ public class TECLPPlayer {
 		}else {
 			return false;
 		}
-		
+
 	}
 
 	public HashMap<String, String> getData() {
@@ -85,12 +92,18 @@ public class TECLPPlayer {
 		args.put("worldZ", ""+ worldZ);
 		args.put("health", ""+ health);
 		args.put("air", ""+ air);
-		args.put("world_name", this.p_ref.getWorld().getName());
 		return args;
 	}
 	
-	public long getWorld(){
-		return world;
+	public String getName(){
+		return this.name;
+	}
+	
+	public void setName(String playerName){
+		this.name = playerName;
+	}
+	public Long getWorld(){
+		return this.world;
 	}
 	
 }

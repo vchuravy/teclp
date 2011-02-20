@@ -1,10 +1,10 @@
 /**
  * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
  * File name: teclpPlayerListener.java
- * Description:  Handle events for all Player related events.
+ * Description:  Handle events for all player related events.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.0
+ * @version v1.2
  *   
  * @see The GNU Public License (GPLv3)
  */
@@ -43,8 +43,8 @@ public class teclpPlayerListener extends PlayerListener{
     @Override
     public void onPlayerJoin(PlayerEvent event) {
     	super.onPlayerJoin(event);
-    	Player p = event.getPlayer(); 
-    	plugin.addPlayer(p.getName(), new TECLPPlayer(p, plugin.getDistance(), p.getWorld().getId())); //Add player to list
+    	Player player = event.getPlayer(); 
+    	plugin.addPlayer(new TECLPPlayer(plugin, player.getName())); //Add player to list
     	plugin.update();
     }
     
@@ -52,6 +52,9 @@ public class teclpPlayerListener extends PlayerListener{
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
     	super.onPlayerMove(event);
+    	if(plugin == null){
+    		System.out.println("Weird things are happening");
+    	}
     	if(plugin.getPlayer(event.getPlayer().getName()).moved()){
     		plugin.update();
     	}

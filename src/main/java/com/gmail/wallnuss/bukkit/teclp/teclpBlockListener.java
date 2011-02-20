@@ -1,10 +1,10 @@
 /**
  * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
  * File name: teclpBlockListener.java
- * Description:  Handle events for all Block related events.
+ * Description:  Handle events for all block related events.
  *   
- * @author Valentin CHuravy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.0
+ * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
+ * @version v1.2
  *   
  * @see The GNU Public License (GPLv3)
  */
