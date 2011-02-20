@@ -1,16 +1,46 @@
 ##
-#Configuration File of teclp v1.11
-#Line starting with # are comments
+# Configuration File of teclp v1.2
+# Author: wallnuss
+# Please use no tabs instead use spaces for indentation.
 ##
-distance_for_updates: 10.0
- # After this distance traveld by one player teclp is updating the positions. The higher the value the rarer is the update.
 
-#For each world add the folder name of the world (e.g nether) and one to many output paths.
-#Paths should look like this 'C:\path\to\tec\output\' on Windows or on linux '/var/www/map/'
+##
+# distance_for_updates:
+# This flag controls the update frequency of teclp.
+# The higher this flag is set the sooner teclp will update the positions.
+# Values between 10.0 and 200.0 (and even higher) are possible.
+##
+
+distance_for_updates: 10.0
+ #Default=10.0
+
+##
+# worlds:
+# Each world for which teclp should create a tectonicus players.js must be specified.
+# In the following form:
+#
+# worlds:
+#     world: #First world
+#         - '/Path/to/output/'
+#         - '/Path/to/second/output/'
+#     nether: #Second world
+#         - 'C:\Windows\path\to\output\'
+# 
+# You can add as many worlds and as many output paths for them as you wish.
+##
+
 worlds:
 
-    nether:
-       - 'C:\dev\bukkit\test_env\nether\'
+    #nether:
+    #  - '/path/to/nether/output'
     world: 
-       - 'C:\dev\bukkit\test_env\world\' #For each output add one line.
-    #   - 'C:\dev\'
+       - '/var/www/map/'
+    #  - '/path/to/second/output'
+
+
+##
+# debug:
+# If you experience any problems activate the debug flag.
+# debug: true
+##
+debug: false

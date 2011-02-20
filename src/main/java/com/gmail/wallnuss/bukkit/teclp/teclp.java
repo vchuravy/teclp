@@ -32,14 +32,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
@@ -52,14 +50,16 @@ public class teclp extends JavaPlugin {
 	public static final String DISTANCE_FOR_UPDATE ="distance_for_update";
 	public static final String CONFIGURATION_FILE ="plugins/teclp/config.yml";
 	public static String LOG_HEADER="TECLP";
+	
 	private final teclpPlayerListener playerListener = new teclpPlayerListener(this);
 	// private final teclpBlockListener blockListener = new teclpBlockListener(this);
 	private final teclpWorldListener worldListener = new teclpWorldListener(this);
 	private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
 
-	boolean debug = true;
+	private boolean debug;
 	private double distance;
-	private Configuration config;
+	private Configuration config; //Configuration engine
+	
 	private ArrayList<TECLPPlayer> players = new ArrayList <TECLPPlayer>(); //PlayerList
 	private HashMap<Long, JsArrayWriter[]> worlds = new HashMap<Long, JsArrayWriter[]>(); // Stores a list of output paths (wrapped in JsArrayWriter) keys used are world ids.
 
@@ -67,7 +67,10 @@ public class teclp extends JavaPlugin {
 		super(pluginLoader, instance, desc, folder, plugin, cLoader);
 		// NOTE: Event registration should be done in onEnable not here as all events are unregistered when a plugin is disabled
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.Plugin#onEnable()
+	 */
 	public void onEnable() {
 		// TODO: Place any custom enable code here including the registration of any events
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -91,6 +94,11 @@ public class teclp extends JavaPlugin {
 		
 		System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bukkit.plugin.Plugin#onDisable()
+	 */
 	public void onDisable() {
 		// TODO: Place any custom disable code here
 
@@ -99,6 +107,7 @@ public class teclp extends JavaPlugin {
 		// EXAMPLE: Custom code, here we just output some info so we can check all is well
 		//System.out.println("Goodbye world!");
 	}
+	
 	public boolean isDebugging(final Player player) {
 		if (debugees.containsKey(player)) {
 			return debugees.get(player);
@@ -111,7 +120,11 @@ public class teclp extends JavaPlugin {
 		debugees.put(player, value);
 	}
 
+	/*
+	 * Updates all specified outputs.
+	 */
 	public void update(){
+		//Initialize all JsArrayWriters
 		for (JsArrayWriter[] jsWriter_array :  worlds.values()){
 			for(JsArrayWriter jsWriter : jsWriter_array){
 				try {
@@ -125,13 +138,16 @@ public class teclp extends JavaPlugin {
 				}
 			}
 		}
+		//For each registred player.
 		for( TECLPPlayer player : players){
-			player.update();
+			player.update(); //updates the data
 			HashMap<String, String> args = new HashMap<String, String>();
-			args = player.getData();
-			Long world = player.getWorld();
-			if(worlds.containsKey(world)){
-				System.out.println("Writing player "+player.getName()+ " currently on World "+ world);
+			args = player.getData(); //get the data
+			Long world = player.getWorld(); //get world
+			if(worlds.containsKey(world)){ //Is world set ?
+				if(debug){
+					System.out.println(LOG_HEADER+"Writing player "+player.getName()+ " currently on World "+ world);
+				}
 				for (JsArrayWriter jsWriter : worlds.get(world)){
 					jsWriter.write(args);
 				}
@@ -139,6 +155,7 @@ public class teclp extends JavaPlugin {
 				System.out.println("World:"+world+" not found");
 			}
 		}
+		//Close writers
 		for (JsArrayWriter[] jsWriter_array :  worlds.values()){
 			for(JsArrayWriter jsWriter : jsWriter_array){
 				jsWriter.close();
@@ -147,6 +164,9 @@ public class teclp extends JavaPlugin {
 
 	}
 
+	/*
+	 * Load config and init vairiables
+	 */
 	private void loadConfig(){
 		config = new Configuration(new File(teclp.CONFIGURATION_FILE) );
 		config.load();
@@ -179,7 +199,9 @@ public class teclp extends JavaPlugin {
 	}
 
 
-
+	/*
+	 * Add a player to the players list
+	 */
 	public void addPlayer(TECLPPlayer teclpPlayer) {
 		players.add(teclpPlayer);
 		if(debug){
@@ -188,7 +210,9 @@ public class teclp extends JavaPlugin {
 	}
 
 
-
+	/*
+	 * get a player from the players list.
+	 */
 	public TECLPPlayer getPlayer(String name) {
 		for (TECLPPlayer player : players){
 			if(player.getName().equals(name)){
@@ -216,6 +240,9 @@ public class teclp extends JavaPlugin {
 
 
 
+	/*
+	 * add a world to the output map
+	 */
 	public void addWorld(World world) {
 		//Get the output paths specified for this world.
 		List<String> paths =config.getStringList("worlds"+"."+world.getName(), null);
