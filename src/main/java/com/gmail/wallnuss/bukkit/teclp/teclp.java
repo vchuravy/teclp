@@ -4,7 +4,7 @@
  * Description:  Main File of the teclp bukkit plugin.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.2
+ * @version v1.21
  *   
  * @see The GNU Public License (GPLv3)
  */
@@ -62,11 +62,6 @@ public class teclp extends JavaPlugin {
 	
 	private ArrayList<TECLPPlayer> players = new ArrayList <TECLPPlayer>(); //PlayerList
 	private HashMap<Long, JsArrayWriter[]> worlds = new HashMap<Long, JsArrayWriter[]>(); // Stores a list of output paths (wrapped in JsArrayWriter) keys used are world ids.
-
-	public teclp(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
-		super(pluginLoader, instance, desc, folder, plugin, cLoader);
-		// NOTE: Event registration should be done in onEnable not here as all events are unregistered when a plugin is disabled
-	}
 	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onEnable()
