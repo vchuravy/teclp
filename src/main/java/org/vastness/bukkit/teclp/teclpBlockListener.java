@@ -1,7 +1,7 @@
 /**
  * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
- * File name: teclpWorldListener.java
- * Description:  Handle events for all world related events.
+ * File name: teclpBlockListener.java
+ * Description:  Handle events for all block related events.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
  * @version v1.2
@@ -23,26 +23,21 @@
  * You should have received a copy of the GNU General Public License
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.vastness.bukkit.teclp;
 
-package com.gmail.wallnuss.bukkit.teclp;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.Material;
+import org.bukkit.event.block.BlockCanBuildEvent;
+import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPhysicsEvent;
 
-import org.bukkit.World;
-import org.bukkit.event.world.WorldEvent;
-import org.bukkit.event.world.WorldListener;
+public class teclpBlockListener extends BlockListener {
+    private final teclp plugin;
 
-public class teclpWorldListener extends WorldListener {
-	
-	private final teclp plugin;
-	
-	public teclpWorldListener(teclp teclp) {
-		plugin = teclp;
-	}
-
-	public void onWorldLoaded(WorldEvent event){
-		super.onWorldLoaded(event);
-    	World world = event.getWorld();
-    	System.out.println("World "+world.getName()+"loaded");
-    	plugin.addWorld(world);
-    	plugin.update();
+    public teclpBlockListener(final teclp teclp) {
+        this.plugin = teclp;
     }
+
+    //put all Block related code here
 }

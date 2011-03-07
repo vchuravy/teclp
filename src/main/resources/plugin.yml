@@ -1,5 +1,5 @@
 name: teclp
 
-main: com.gmail.wallnuss.bukkit.teclp.teclp
+main: org.vastness.bukkit.teclp.teclp
 
 version: 1.21

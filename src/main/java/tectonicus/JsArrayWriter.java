@@ -29,7 +29,7 @@ import java.util.Map;
 /*
  * @author: OrangyTang
  * All rights to the original developer.
- * To not reuse and redistribute with out the permission of the author.
+ * Do not reuse and redistribute with out the permission of the author.
  */
 
 public class JsArrayWriter

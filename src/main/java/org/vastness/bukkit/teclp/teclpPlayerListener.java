@@ -24,14 +24,14 @@
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.gmail.wallnuss.bukkit.teclp ;
+package org.vastness.bukkit.teclp ;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import com.gmail.wallnuss.bukkit.teclp.teclp;
+import org.vastness.bukkit.teclp.teclp;
 
 public class teclpPlayerListener extends PlayerListener{
 	private final teclp plugin; 

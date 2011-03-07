@@ -1,14 +1,3 @@
-/**
- * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
- * File name: teclp.java
- * Description:  Main File of the teclp bukkit plugin.
- *   
- * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.21
- *   
- * @see The GNU Public License (GPLv3)
- */
-
 /* 
  * This file is part of teclp.
  * teclp is free software: you can redistribute it and/or modify
@@ -23,8 +12,7 @@
  * You should have received a copy of the GNU General Public License
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.gmail.wallnuss.bukkit.teclp;
+package org.vastness.bukkit.teclp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,19 +21,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
 import tectonicus.JsArrayWriter;
 
+/**
+ * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
+ * File name: teclp.java
+ * Description:  Main File of the teclp bukkit plugin.
+ *   
+ * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
+ * @version v1.21
+ *   
+ * @see The GNU Public License (GPLv3)
+ */
 public class teclp extends JavaPlugin {
 	public static final String DISTANCE_FOR_UPDATE ="distance_for_update";
 	public static final String CONFIGURATION_FILE ="plugins/teclp/config.yml";

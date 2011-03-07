@@ -24,7 +24,7 @@
  * along with teclp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.gmail.wallnuss.bukkit.teclp;
+package org.vastness.bukkit.teclp;
 
 import java.util.HashMap;
 import org.bukkit.entity.Player;
