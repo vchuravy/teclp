@@ -54,8 +54,7 @@ public class teclpPlayerListener extends PlayerListener{
     	super.onPlayerMove(event);
     	if(plugin == null){
     		System.out.println("Weird things are happening");
-    	}
-    	if(plugin.getPlayer(event.getPlayer().getName()).moved()){
+    	}else if(plugin.getPlayer(event.getPlayer().getName()).moved()){
     		plugin.update();
     	}
     }

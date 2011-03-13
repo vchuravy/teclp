@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -68,7 +69,7 @@ public class teclp extends JavaPlugin {
 		LOG_HEADER+=" "+pdfFile.getVersion()+" : ";
 		// Register our events
 		PluginManager pm = getServer().getPluginManager();
-
+		
 		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Monitor, this );
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
@@ -121,7 +122,7 @@ public class teclp extends JavaPlugin {
 				try {
 					jsWriter.open();
 				} catch (FileNotFoundException event) {
-					// TODO Auto-generated catch block
+					System.err.println(LOG_HEADER+"File not found");
 					event.printStackTrace();
 				} catch (IOException event) {
 					// TODO Auto-generated catch block
