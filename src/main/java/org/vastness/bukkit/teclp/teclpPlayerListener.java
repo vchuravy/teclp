@@ -4,7 +4,7 @@
  * Description:  Handle events for all player related events.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.2
+ * @version v1.22
  *   
  * @see The GNU Public License (GPLv3)
  */

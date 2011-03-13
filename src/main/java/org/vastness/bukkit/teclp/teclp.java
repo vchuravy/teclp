@@ -39,7 +39,7 @@ import tectonicus.JsArrayWriter;
  * Description:  Main File of the teclp bukkit plugin.
  *   
  * @author Valentin Churavy, v.churavy [at] gmail [dot] com, Copyright (C) 2011.
- * @version v1.21
+ * @version v1.22
  *   
  * @see The GNU Public License (GPLv3)
  */
