@@ -118,17 +118,21 @@ public class teclp extends JavaPlugin {
 	public void update(){
 		//Initialize all JsArrayWriters
 		for (JsArrayWriter[] jsWriter_array :  worlds.values()){
+		    try {
 			for(JsArrayWriter jsWriter : jsWriter_array){
 				try {
 					jsWriter.open();
 				} catch (FileNotFoundException event) {
 					System.err.println(LOG_HEADER+"File not found");
 					event.printStackTrace();
-				} catch (IOException event) {
+				} catch (Exception event) {
 					// TODO Auto-generated catch block
 					event.printStackTrace();
 				}
 			}
+		    }catch(NullPointerException event){
+		        System.err.println("One or more paths inf your config is wrong, please fix that.");
+		    }
 		}
 		//For each registred player.
 		for( TECLPPlayer player : players){
