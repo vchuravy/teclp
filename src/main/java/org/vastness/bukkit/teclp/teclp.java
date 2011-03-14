@@ -30,6 +30,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
 
 import tectonicus.JsArrayWriter;
 
@@ -56,36 +60,57 @@ public class teclp extends JavaPlugin {
 	private boolean debug;
 	private double distance;
 	private Configuration config; //Configuration engine
+	private boolean useJSONOutput = false;
 	
 	private ArrayList<TECLPPlayer> players = new ArrayList <TECLPPlayer>(); //PlayerList
 	private HashMap<Long, JsArrayWriter[]> worlds = new HashMap<Long, JsArrayWriter[]>(); // Stores a list of output paths (wrapped in JsArrayWriter) keys used are world ids.
+        private int port;
 	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
-	public void onEnable() {
-		// TODO: Place any custom enable code here including the registration of any events
-		PluginDescriptionFile pdfFile = this.getDescription();
-		LOG_HEADER+=" "+pdfFile.getVersion()+" : ";
-		// Register our events
-		PluginManager pm = getServer().getPluginManager();
-		
-		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Monitor, this );
-		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.WORLD_LOADED, worldListener, Priority.Monitor, this);
+        public void onEnable() {
+            // TODO: Place any custom enable code here including the registration of any events
+            PluginDescriptionFile pdfFile = this.getDescription();
+            LOG_HEADER+=" "+pdfFile.getVersion()+" : ";
+            loadConfig();
 
-		// EXAMPLE: Custom code, here we just output some info so we can check all is well
-		loadConfig();
-		//Adding online player if any important for reload.
-		for(Player player : this.getServer().getOnlinePlayers()){
-			this.addPlayer(new TECLPPlayer(this, player.getName()));
-		}
-		
-		System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
-	}
+            if(useJSONOutput){
+                org.eclipse.jetty.server.Server server = new Server(port);
+                ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+                context.setContextPath("/");
+                server.setHandler(context);
+
+                context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
+
+                try {
+                    server.start();
+                    server.join();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }else{
+                // Register our events
+                PluginManager pm = getServer().getPluginManager();
+
+                pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Monitor, this );
+                pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
+                pm.registerEvent(Type.WORLD_LOADED, worldListener, Priority.Monitor, this);
+
+                // EXAMPLE: Custom code, here we just output some info so we can check all is well
+
+                //Adding online player if any important for reload.
+                for(Player player : this.getServer().getOnlinePlayers()){
+                    this.addPlayer(new TECLPPlayer(this, player.getName()));
+                }
+            }
+            System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
+        }
 	
 	/*
 	 * (non-Javadoc)
@@ -168,9 +193,14 @@ public class teclp extends JavaPlugin {
 		config.load();
 		//Load debug flag
 		debug=config.getBoolean("debug", false);
+		useJSONOutput=config.getBoolean("useJSONOutput", false);	    
+		
 		if(debug){
 			System.out.println(LOG_HEADER+"debug activated");
 		}
+		if(useJSONOutput){
+		    port = config.getInt("port", 5555);
+		}else{
 		//Load worlds
 		List<String> world_nodes = config.getKeys("worlds"); //get all world names
 
@@ -192,6 +222,7 @@ public class teclp extends JavaPlugin {
 		}
 		//Load distance
 		distance =  config.getDouble(teclp.DISTANCE_FOR_UPDATE, 10);
+		}
 	}
 
 
