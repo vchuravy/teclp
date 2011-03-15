@@ -1,5 +1,7 @@
 package org.vastness.bukkit.teclp.embedded;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,12 +18,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.vastness.bukkit.teclp.teclp;
+import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
 
 public class WorldDataServlet extends HttpServlet {
     
-    private JavaPlugin plugin;
-    public WorldDataServlet(JavaPlugin plugin){
+    private teclp plugin;
+    public WorldDataServlet(teclp plugin){
         this.plugin = plugin;
     }
     
@@ -50,22 +56,55 @@ public class WorldDataServlet extends HttpServlet {
         Map jsonObj = new LinkedHashMap();
         jsonObj.put("worlds", getWorlds() );
         jsonObj.put("name", worldName);
+        jsonObj.put("spawn", getSpawn(world));
+        jsonObj.put("tectonicus", getTectonicusConf());
         jsonObj.put("time", new Long(world.getTime()));
         jsonObj.put("players", getPlayers(world));
         jsonObj.put("specialplaces", getSpecialPlaces());
-        jsonObj.put("wgregions", getWgRegions());
+        jsonObj.put("wgregions", getWgRegions(worldName));
         return JSONValue.toJSONString(jsonObj);
         
     }
 
-    private Object getWgRegions() {
-        // TODO Auto-generated method stub
-        return null;
+    private Map getTectonicusConf() {
+        Map data = new LinkedHashMap();
+        TectonicusConfig tecConfig = TectonicusConfig.getInstance();
+        data.put("tiletype", tecConfig.getTileType());
+        data.put("showspawn", tecConfig.isShowSpawn());
+        data.put("maxzoom", new Integer(tecConfig.getMaxZoom()));
+        data.put("signsinitiallyvisible", new Boolean(tecConfig.isSignsInitiallyVisible()));
+        data.put("playersinitiallyvisible", new Boolean(tecConfig.isPlayersInitiallyVisible()));
+        data.put("placesinitiallyvisible", new Boolean(tecConfig.isPlacesInitiallyVisible()));
+        data.put("pybukkitwebenabled", new Boolean(tecConfig.isPyBukkitWebEnabled()));
+        data.put("chatenabled", new Boolean(tecConfig.isChatEnabled()));
+        data.put("regionssinitiallyvisible", new Boolean(tecConfig.isRegionsInitiallyVisible()));
+        return data;
     }
 
-    private Object getSpecialPlaces() {
-        // TODO Auto-generated method stub
-        return null;
+    private Map getSpawn(World world) {
+        Map data = new LinkedHashMap();
+        Location loc = world.getSpawnLocation();
+        data.put("x", new Integer(loc.getBlockX()));
+        data.put("y", new Integer(loc.getBlockY()));
+        data.put("z", new Integer(loc.getBlockZ()));
+        return data;
+    }
+
+    private Map getWgRegions(String worldName) {
+        JSONParser json = new JSONParser();
+        Map data;
+        try{
+            data = (Map) json.parse(new FileReader(new File("plugins/WorldGuard/"+worldName+".regions.json")));
+        } catch (Exception e){
+            data = new LinkedHashMap();
+            //TODO
+        }
+        return data;
+    }
+
+    private Map getSpecialPlaces() {
+        Map data = new LinkedHashMap();
+        return data;
     }
 
     private Map getPlayers(World world) {

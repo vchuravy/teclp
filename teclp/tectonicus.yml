@@ -1,0 +1,9 @@
+ImageFormat : 'gif'
+showSpawn : true
+maxZoom : 8
+signsVisible : true
+playersVisible : true
+placesVisible : true
+regionsVisible : true
+usePyBukkitWeb : false
+activateChat : false
