@@ -17,11 +17,11 @@ package org.vastness.bukkit.teclp;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -31,6 +31,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
@@ -80,16 +81,16 @@ public class teclp extends JavaPlugin {
                 TectonicusConfig tecConfig = TectonicusConfig.getInstance();
                 tecConfig.loadConfig("plugins/teclp/tectonicus.yml");
                 
-                org.eclipse.jetty.server.Server server = new Server(port);
+                InetSocketAddress addr = new InetSocketAddress(port);
+                org.eclipse.jetty.server.Server server = new Server(addr);
                 ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
                 context.setContextPath("/");
                 server.setHandler(context);
 
                 context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
-
+                
                 try {
                     server.start();
-                    server.join();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
