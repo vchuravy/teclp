@@ -123,12 +123,12 @@ public class WorldDataServlet extends HttpServlet {
         data.put("money", new Double(0.0)); //TODO
         
         Location loc = player.getLocation();
-        Map postionMap = new LinkedHashMap<String, Integer>();
-        postionMap.put("x", new Integer(loc.getBlockX()));
-        postionMap.put("y", new Integer(loc.getBlockY()));
-        postionMap.put("z", new Integer(loc.getBlockZ()));
+        Map positionMap = new LinkedHashMap<String, Integer>();
+        positionMap.put("x", new Integer(loc.getBlockX()));
+        positionMap.put("y", new Integer(loc.getBlockY()));
+        positionMap.put("z", new Integer(loc.getBlockZ()));
         
-        data.put("postion", postionMap);
+        data.put("position", positionMap);
         
         Map inventory = new LinkedHashMap<String, Integer>();
         PlayerInventory pInv = player.getInventory();
