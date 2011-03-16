@@ -36,7 +36,7 @@ public class WorldDataServlet extends HttpServlet {
        String world = request.getParameter("world");
        String json = createJson(world);
        
-       response.setContentType("test/javascript");
+       response.setContentType("text/javascript");
        response.setStatus(HttpServletResponse.SC_OK);
        response.getWriter().print(json);
     }
