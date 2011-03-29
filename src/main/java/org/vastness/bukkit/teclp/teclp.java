@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -34,6 +37,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.vastness.bukkit.teclp.embedded.ExternalStaticServlet;
+import org.vastness.bukkit.teclp.embedded.InternalStaticServlet;
 import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
 import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
 
@@ -85,9 +90,13 @@ public class teclp extends JavaPlugin {
                 org.eclipse.jetty.server.Server server = new Server(addr);
                 ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
                 context.setContextPath("/");
+               
                 server.setHandler(context);
 
                 context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
+                DefaultServlet data = new DefaultServlet();
+                context.addServlet(new ServletHolder(new InternalStaticServlet("web/")),"/");
+                context.addServlet(new ServletHolder(new ExternalStaticServlet("teclp/data/")), "/data/");
                 
                 try {
                     server.start();
