@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -33,12 +30,12 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.vastness.bukkit.teclp.embedded.ExternalStaticServlet;
-import org.vastness.bukkit.teclp.embedded.InternalStaticServlet;
 import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
 import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
 
@@ -88,15 +85,35 @@ public class teclp extends JavaPlugin {
                 
                 InetSocketAddress addr = new InetSocketAddress(port);
                 org.eclipse.jetty.server.Server server = new Server(addr);
-                ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-                context.setContextPath("/");
-               
-                server.setHandler(context);
-
-                context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
-                DefaultServlet data = new DefaultServlet();
-                context.addServlet(new ServletHolder(new InternalStaticServlet("web/")),"/");
-                context.addServlet(new ServletHolder(new ExternalStaticServlet("teclp/data/")), "/data/");
+                
+                //Context for JSON
+                ServletContextHandler jsonContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+                
+                jsonContext.setContextPath("/json");
+                jsonContext.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
+                //jsonContext.addServlet(new ServletHolder(new ChatLogServlet(this)), "/getChatLog.js"); //TODO
+                
+                //Context for handling the Tectonicus data outside of the Jar.
+                String dataDir = "plugins/teclp/data"; //TODO allow customization.
+                ServletContextHandler dataContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+                
+                dataContext.setContextPath("/data"); 
+                dataContext.setResourceBase(dataDir);
+                dataContext.addServlet(new ServletHolder(new DefaultServlet()), "/");
+                
+                // Context for handling html pages inside the Jar.
+                String webDir = this.getClass().getClassLoader().getResource("web").toExternalForm();
+                ServletContextHandler webContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+                
+                webContext.setContextPath("/"); 
+                webContext.setResourceBase(webDir);
+                webContext.addServlet(new ServletHolder(new DefaultServlet()), "/");
+                
+                //Merging it all together
+                ContextHandlerCollection contexts = new ContextHandlerCollection();
+                contexts.setHandlers(new Handler[] {webContext, jsonContext, dataContext });
+                
+                server.setHandler(contexts);
                 
                 try {
                     server.start();
