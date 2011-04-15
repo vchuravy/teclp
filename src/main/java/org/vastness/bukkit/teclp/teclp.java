@@ -122,7 +122,7 @@ public class teclp extends JavaPlugin {
                     e.printStackTrace();
                 }
 
-            }else{
+            }
                 // Register our events
                 PluginManager pm = getServer().getPluginManager();
 
@@ -131,7 +131,7 @@ public class teclp extends JavaPlugin {
                 pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
                 pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
                 pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
-                pm.registerEvent(Type.WORLD_LOADED, worldListener, Priority.Monitor, this);
+                pm.registerEvent(Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
 
                 // EXAMPLE: Custom code, here we just output some info so we can check all is well
 
@@ -139,7 +139,7 @@ public class teclp extends JavaPlugin {
                 for(Player player : this.getServer().getOnlinePlayers()){
                     this.addPlayer(new TECLPPlayer(this, player.getName()));
                 }
-            }
+            
             System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
         }
 	

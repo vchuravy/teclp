@@ -27,7 +27,7 @@
 package org.vastness.bukkit.teclp;
 
 import org.bukkit.World;
-import org.bukkit.event.world.WorldEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldListener;
 
 public class teclpWorldListener extends WorldListener {
@@ -38,8 +38,8 @@ public class teclpWorldListener extends WorldListener {
 		plugin = teclp;
 	}
 
-	public void onWorldLoaded(WorldEvent event){
-		super.onWorldLoaded(event);
+	public void onWorldLoaded(WorldLoadEvent event){
+		super.onWorldLoad(event);
     	World world = event.getWorld();
     	System.out.println("World "+world.getName()+"loaded");
     	plugin.addWorld(world);
