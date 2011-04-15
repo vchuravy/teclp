@@ -109,7 +109,7 @@ public class WorldDataServlet extends HttpServlet {
     @SuppressWarnings({ "rawtypes" })
     private Map getSpecialPlaces() {
         final Map data = new LinkedHashMap();
-        return data; //TODO
+        return data;
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
