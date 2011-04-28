@@ -15,14 +15,18 @@
 package org.vastness.bukkit.teclp;
 
 import java.io.File;
-import java.util.HashMap;
+import java.net.InetSocketAddress;
 
+import java.util.HashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
@@ -46,42 +50,72 @@ public class teclp extends JavaPlugin {
 
 	private boolean debug;
 	private Configuration config; //Configuration engine
-	private boolean useJSONOutput = false;
 	
         private int port;
 	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
-        public void onEnable() {
-            PluginDescriptionFile pdfFile = this.getDescription();
-            LOG_HEADER+=" "+pdfFile.getVersion()+" : ";
-            loadConfig();
+    public void onEnable() {
+        PluginDescriptionFile pdfFile = this.getDescription();
+        LOG_HEADER += " " + pdfFile.getVersion() + " : ";
+        loadConfig();
+        TectonicusConfig tecConfig = TectonicusConfig.getInstance();
+        tecConfig.loadConfig("plugins/teclp/tectonicus.yml");
 
-            TectonicusConfig tecConfig = TectonicusConfig.getInstance();
-            tecConfig.loadConfig("plugins/teclp/tectonicus.yml");
+        InetSocketAddress addr = new InetSocketAddress(port);
+        org.eclipse.jetty.server.Server server = new Server(addr);
 
-            org.eclipse.jetty.server.Server server = new Server(port);
-            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-            context.setContextPath("/");
-            server.setHandler(context);
+        // Context for JSON
+        ServletContextHandler jsonContext = new ServletContextHandler(
+                ServletContextHandler.SESSIONS);
 
-            context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
+        jsonContext.setContextPath("/json");
+        jsonContext.addServlet(new ServletHolder(new WorldDataServlet(this)),
+                "/getData.js");
+        // jsonContext.addServlet(new ServletHolder(new ChatLogServlet(this)),
+        // "/getChatLog.js"); //TODO
 
-            try {
-                server.start();
-                server.join();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        // Context for handling the Tectonicus data outside of the Jar.
+        String dataDir = "plugins/teclp/data"; // TODO allow customization.
+        ServletContextHandler dataContext = new ServletContextHandler(
+                ServletContextHandler.SESSIONS);
 
+        dataContext.setContextPath("/data");
+        dataContext.setResourceBase(dataDir);
+        dataContext.addServlet(new ServletHolder(new DefaultServlet()), "/");
 
-            // Register our events
-            PluginManager pm = getServer().getPluginManager();
+        // Context for handling html pages inside the Jar.
+        String webDir = this.getClass().getClassLoader().getResource("web")
+                .toExternalForm();
+        ServletContextHandler webContext = new ServletContextHandler(
+                ServletContextHandler.SESSIONS);
 
-            System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
+        webContext.setContextPath("/");
+        webContext.setResourceBase(webDir);
+        webContext.addServlet(new ServletHolder(new DefaultServlet()), "/");
+
+        // Merging it all together
+        ContextHandlerCollection contexts = new ContextHandlerCollection();
+        contexts.setHandlers(new Handler[] { webContext, jsonContext,
+                dataContext });
+
+        server.setHandler(contexts);
+
+        try {
+            server.start();
+            server.join();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
+        // Register our events
+        PluginManager pm = getServer().getPluginManager();
+
+        System.out.println(pdfFile.getName() + " version "
+                + pdfFile.getVersion() + " is enabled!");
+    }
 	
 	/*
 	 * (non-Javadoc)

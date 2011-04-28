@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <title>Tectonicus map</title>
+        <link href="skins/default.css" rel="stylesheet" type="text/css" media="all" />
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="net.darklikally.js.utils.js"></script>
+        <script type="text/javascript" src="tectonicus.utils.js"></script>
+        <script type="text/javascript" src="tectonicus.updater.js"></script>
+        <script type="text/javascript" src="tectonicus.main.js"></script>
+        <script type="text/javascript" src="tectonicus.start.js"></script>
+        <script type="text/javascript">
+        
+          function initialize() {
+            var myLatLng = new google.maps.LatLng(0, -180);
+            var myOptions = {
+              zoom: 3,
+              center: myLatLng,
+              mapTypeId: google.maps.MapTypeId.TERRAIN
+            };
+        
+            var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        
+            var flightPlanCoordinates = [
+                new google.maps.LatLng(37.772323, -122.214897),
+                new google.maps.LatLng(21.291982, -157.821856),
+                new google.maps.LatLng(-18.142599, 178.431),
+                new google.maps.LatLng(-27.46758, 153.027892)
+            ];
+            var flightPath = new google.maps.Polyline({
+              path: flightPlanCoordinates,
+              strokeColor: "#FF0000",
+              strokeOpacity: 1.0,
+              strokeWeight: 2
+            });
+        
+           flightPath.setMap(map);
+          }
+        </script>
+    </head>
+    <body>
+        <div id="pageWrapper">
+            <div id="tectonicusWrapper">
+                <div id="map_canvas" style="width:100%; height:100%"></div>
+            </div>
+            <div id="sidebarWrapper">
+                <div id="sidebarContainer">
+                    <div class="sidebarHeading">
+                        <span>World name</span>
+                    </div>
+                    <div class="sidebarBox" id="worldSelectionWrapper">
+                        <select id="worldSelection">
+                        </select>
+                    </div>
+                    <div class="sidebarBox" id="worldTimeWrapper">
+                        <div id="worldTimeImg" align="center">
+                            <div id="worldTimeImgPointer"><img src="Images/Timepointer.gif" alt="" /></div>
+                            <div id="worldTimeImgImg"><img src="Images/time.png" alt="time" width="260" height="61" /></div>
+                        </div>
+                        <div id="worldTimeDigit"></div>
+                    </div>
+                    <div class="sidebarBox" id="playerListWrapper">
+                        <label for="trackPlayerOff">
+                            <strong>Playerlist</strong>
+                            <input type="radio" id="trackPlayerOff" name="trackPlayer" value="0" checked="checked" />Check to track player</label>
+                        <span>Player list</span>
+                    </div>
+                    <div class="sidebarBox" id="specialPlacesListWrapper"">
+                        <strong>Special places list</strong>
+                    </div>
+                    <div class="sidebarBox" id="wgregionsListWrapper">
+                        <strong>WorldGuard region list</strong>
+                    </div>
+                </div>
+            </div>
+            <!--<div id="chatWrapper">
+                <div id="chatContainer">
+                    <div id="chatLog">
+                        <span>Chat log</span>
+                    </div>
+                    <div id="chatLine">
+                        <span><strong>&gt;</strong>Chat Input</span>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

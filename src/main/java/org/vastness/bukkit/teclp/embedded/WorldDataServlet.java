@@ -25,15 +25,16 @@ import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
 public class WorldDataServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private teclp plugin;
-    public WorldDataServlet(teclp plugin){
+    private final teclp plugin;
+    public WorldDataServlet(final teclp plugin){
         this.plugin = plugin;
     }
     
-    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    
+    protected void doGet (final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
     {
-       String world = request.getParameter("world");
-       String json = createJson(world);
+       final String world = request.getParameter("world");
+       final String json = createJson(world);
        
        response.setContentType("text/javascript");
        response.setStatus(HttpServletResponse.SC_OK);
@@ -54,7 +55,7 @@ public class WorldDataServlet extends HttpServlet {
                 worldName = world.getName();
             }
         }
-        Map jsonObj = new LinkedHashMap();
+        final Map jsonObj = new LinkedHashMap();
         jsonObj.put("worlds", getWorlds() );
         jsonObj.put("name", worldName);
         jsonObj.put("spawn", getSpawn(world));
@@ -67,10 +68,11 @@ public class WorldDataServlet extends HttpServlet {
         
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Map getTectonicusConf() {
-        Map data = new LinkedHashMap();
-        TectonicusConfig tecConfig = TectonicusConfig.getInstance();
+        final Map data = new LinkedHashMap();
+        final TectonicusConfig tecConfig = TectonicusConfig.getInstance();
         data.put("tiletype", tecConfig.getTileType());
         data.put("showspawn", tecConfig.isShowSpawn());
         data.put("maxzoom", new Integer(tecConfig.getMaxZoom()));
@@ -83,23 +85,24 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Map getSpawn(World world) {
-        Map data = new LinkedHashMap();
-        Location loc = world.getSpawnLocation();
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Map getSpawn(final World world) {
+        final Map data = new LinkedHashMap();
+        final Location loc = world.getSpawnLocation();
         data.put("x", new Integer(loc.getBlockX()));
         data.put("y", new Integer(loc.getBlockY()));
         data.put("z", new Integer(loc.getBlockZ()));
         return data;
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    private Map getWgRegions(String worldName) {
-        JSONParser json = new JSONParser();
+    @SuppressWarnings("rawtypes")
+    private Map getWgRegions(final String worldName) {
+        final JSONParser json = new JSONParser();
         Map data;
         try{
             data = (Map) json.parse(new FileReader(new File("plugins/WorldGuard/"+worldName+".regions.json")));
-        } catch (Exception e){
+        } catch (final Exception e){
             data = new LinkedHashMap();
             //TODO
         }
@@ -108,7 +111,7 @@ public class WorldDataServlet extends HttpServlet {
 
     @SuppressWarnings({ "rawtypes" })
     private Map getSpecialPlaces() {
-        Map data = new LinkedHashMap();
+        final Map data = new LinkedHashMap();
         return data;
     }
 
@@ -129,17 +132,17 @@ public class WorldDataServlet extends HttpServlet {
         data.put("air", new Integer(player.getRemainingAir()));
         data.put("money", new Double(0.0)); //TODO
         
-        Location loc = player.getLocation();
-        Map positionMap = new LinkedHashMap<String, Integer>();
+        final Location loc = player.getLocation();
+        final Map positionMap = new LinkedHashMap<String, Integer>();
         positionMap.put("x", new Integer(loc.getBlockX()));
         positionMap.put("y", new Integer(loc.getBlockY()));
         positionMap.put("z", new Integer(loc.getBlockZ()));
         
         data.put("position", positionMap);
         
-        Map inventory = new LinkedHashMap<String, Integer>();
-        PlayerInventory pInv = player.getInventory();
-        ItemStack[] stack = pInv.getContents();
+        final Map inventory = new LinkedHashMap<String, Integer>();
+        final PlayerInventory pInv = player.getInventory();
+        final ItemStack[] stack = pInv.getContents();
         for(int i = 0; i < stack.length; i++){
             inventory.put(new Integer(stack[i].getTypeId()).toString(), new Integer(stack[i].getAmount()));
         }
@@ -151,9 +154,9 @@ public class WorldDataServlet extends HttpServlet {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getWorlds() {
-        List<World> worldList = plugin.getServer().getWorlds();
-        Map data = new LinkedHashMap<String, Integer>();
-        for (World world : worldList ){
+        final List<World> worldList = plugin.getServer().getWorlds();
+        final Map data = new LinkedHashMap<String, Integer>();
+        for (final World world : worldList ){
             data.put(world.getName(), new Integer(worldList.indexOf(world)));
         }
         return data;
