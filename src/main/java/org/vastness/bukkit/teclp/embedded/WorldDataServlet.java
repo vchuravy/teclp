@@ -17,15 +17,14 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.vastness.bukkit.teclp.teclp;
 import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
 
 public class WorldDataServlet extends HttpServlet {
-    
+
+    private static final long serialVersionUID = 1L;
     private teclp plugin;
     public WorldDataServlet(teclp plugin){
         this.plugin = plugin;
@@ -41,12 +40,14 @@ public class WorldDataServlet extends HttpServlet {
        response.getWriter().print(json);
     }
     
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private String createJson(String worldName){
-        World world;
+        World world = null;
         if (worldName == null){
             world = plugin.getServer().getWorlds().get(0);
             worldName = world.getName();
         }else{
+            
             world = plugin.getServer().getWorld(worldName);
             if (world == null){
                 world = plugin.getServer().getWorlds().get(0);
@@ -66,6 +67,7 @@ public class WorldDataServlet extends HttpServlet {
         
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getTectonicusConf() {
         Map data = new LinkedHashMap();
         TectonicusConfig tecConfig = TectonicusConfig.getInstance();
@@ -81,6 +83,7 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getSpawn(World world) {
         Map data = new LinkedHashMap();
         Location loc = world.getSpawnLocation();
@@ -90,6 +93,7 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes" })
     private Map getWgRegions(String worldName) {
         JSONParser json = new JSONParser();
         Map data;
@@ -102,11 +106,13 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes" })
     private Map getSpecialPlaces() {
         Map data = new LinkedHashMap();
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getPlayers(World world) {
         List<Player> players =world.getPlayers();
         Map data = new LinkedHashMap();
@@ -116,6 +122,7 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getPlayer(Player player) {
         Map data = new LinkedHashMap();
         data.put("health", new Integer(player.getHealth()));
@@ -142,6 +149,7 @@ public class WorldDataServlet extends HttpServlet {
         return data;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Map getWorlds() {
         List<World> worldList = plugin.getServer().getWorlds();
         Map data = new LinkedHashMap<String, Integer>();
