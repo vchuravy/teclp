@@ -27,10 +27,12 @@
 package org.vastness.bukkit.teclp ;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.vastness.bukkit.teclp.teclp;
 
 public class teclpPlayerListener extends PlayerListener{
@@ -41,7 +43,7 @@ public class teclpPlayerListener extends PlayerListener{
     }
     
     @Override
-    public void onPlayerJoin(PlayerEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
     	super.onPlayerJoin(event);
     	Player player = event.getPlayer(); 
     	plugin.addPlayer(new TECLPPlayer(plugin, player.getName())); //Add player to list
@@ -59,7 +61,7 @@ public class teclpPlayerListener extends PlayerListener{
     	}
     }
     
-    public void onPlayerTeleport(PlayerMoveEvent event) {
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
     	super.onPlayerTeleport(event);
     	plugin.update();
     }
@@ -69,7 +71,7 @@ public class teclpPlayerListener extends PlayerListener{
     	plugin.update();
     }
 
-    public void onPlayerQuit(PlayerEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
     	super.onPlayerQuit(event);
     	plugin.removePlayer(event.getPlayer().getName());
     	plugin.update();

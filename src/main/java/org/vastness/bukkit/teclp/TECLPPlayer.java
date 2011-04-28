@@ -28,7 +28,6 @@ package org.vastness.bukkit.teclp;
 
 import java.util.HashMap;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 
 public class TECLPPlayer {
 
