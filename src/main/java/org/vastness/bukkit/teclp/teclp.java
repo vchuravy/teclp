@@ -15,17 +15,9 @@
 package org.vastness.bukkit.teclp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,8 +27,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.vastness.bukkit.teclp.embedded.WorldDataServlet;
 import org.vastness.bukkit.teclp.tectonicus.TectonicusConfig;
-
-import tectonicus.JsArrayWriter;
 
 /**
  * Project: teclp: Live player updates for tectonicus. A Bukkit plugin.
@@ -64,34 +54,32 @@ public class teclp extends JavaPlugin {
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
         public void onEnable() {
-            // TODO: Place any custom enable code here including the registration of any events
             PluginDescriptionFile pdfFile = this.getDescription();
             LOG_HEADER+=" "+pdfFile.getVersion()+" : ";
             loadConfig();
 
-            if(useJSONOutput){
-                TectonicusConfig tecConfig = TectonicusConfig.getInstance();
-                tecConfig.loadConfig("plugins/teclp/tectonicus.yml");
-                
-                org.eclipse.jetty.server.Server server = new Server(port);
-                ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-                context.setContextPath("/");
-                server.setHandler(context);
+            TectonicusConfig tecConfig = TectonicusConfig.getInstance();
+            tecConfig.loadConfig("plugins/teclp/tectonicus.yml");
 
-                context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
+            org.eclipse.jetty.server.Server server = new Server(port);
+            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+            context.setContextPath("/");
+            server.setHandler(context);
 
-                try {
-                    server.start();
-                    server.join();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+            context.addServlet(new ServletHolder(new WorldDataServlet(this)), "/getData.js");
 
-            }else{
-                // Register our events
-                PluginManager pm = getServer().getPluginManager();
+            try {
+                server.start();
+                server.join();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+
+
+            // Register our events
+            PluginManager pm = getServer().getPluginManager();
+
             System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
         }
 	
