@@ -52,6 +52,7 @@ public class teclp extends JavaPlugin {
 	private Configuration config; //Configuration engine
 	
         private int port;
+        private String dataDir;
 	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onEnable()
@@ -77,7 +78,6 @@ public class teclp extends JavaPlugin {
         // "/getChatLog.js"); //TODO
 
         // Context for handling the Tectonicus data outside of the Jar.
-        String dataDir = "plugins/teclp/data"; // TODO allow customization.
         ServletContextHandler dataContext = new ServletContextHandler(
                 ServletContextHandler.SESSIONS);
 
@@ -152,5 +152,6 @@ public class teclp extends JavaPlugin {
 			System.out.println(LOG_HEADER+"debug activated");
 		}
 		port = config.getInt("port", 5555);
+		dataDir = config.getString("tectonicusDirectory", "plugins/teclp/data/");
 	}
 }
