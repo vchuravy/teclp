@@ -73,9 +73,9 @@ public class teclp extends JavaPlugin {
 
         jsonContext.setContextPath("/json");
         jsonContext.addServlet(new ServletHolder(new WorldDataServlet(this)),
-                "/getData.js");
+                "/getData.json");
         // jsonContext.addServlet(new ServletHolder(new ChatLogServlet(this)),
-        // "/getChatLog.js"); //TODO
+        // "/getChatLog.json"); //TODO
 
         // Context for handling the Tectonicus data outside of the Jar.
         ServletContextHandler dataContext = new ServletContextHandler(
