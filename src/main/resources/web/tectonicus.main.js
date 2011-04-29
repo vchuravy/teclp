@@ -118,7 +118,7 @@ TectonicusMap.prototype = {
         var me = this;
         
         jQuery.ajax({
-            url: 'data/' worldName + '/' + scriptName + '.js',
+            url: 'data/' + worldName + '/' + scriptName + '.js',
             dataType: 'script',
             cache: false,
             async: asyncr,
